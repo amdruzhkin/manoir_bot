@@ -11,6 +11,7 @@ storage = MemoryStorage()
 dispatcher = Dispatcher(storage=storage)
 dispatcher.callback_query.middleware(CallbackAnswerMiddleware())
 
+
 async def main():
     dispatcher.include_router(router=bot_commands.router)
     dispatcher.include_router(router=callbacks.router)

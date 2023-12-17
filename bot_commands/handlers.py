@@ -1,27 +1,37 @@
 from aiogram import Router
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 from aiogram.filters import Command, CommandObject
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from callbacks.factories import *
-from models.user import *
+from callbacks import *
+from config import MESSAGES
+from models import *
+
 
 router = Router()
 @router.message(Command('start'))
 async def start_handler(message: Message,
                         command: CommandObject):
 
-    user = User()
-    user.telegram_id = message.from_user.id
-    user.username = message.from_user.username
-    user.campaign = str(command.args)
-    user.language = 'EN'
-    await create_user(user)
-    await message.answer(f'Hello, {user.username }')
+    user = await get_user_by_id(message.from_user.id)
+    if user is None:
+        user = User()
+        user.tg_id = message.from_user.id
+        user.tg_username = message.from_user.username
+        user.campaign = str(command.args)
+        user.language = 'EN'
+        await create_user(user)
+
+    keyboard = get_start_menu_kb(user.language)
+
+    await message.answer(text=MESSAGES['welcome'][user.language].format(username=message.from_user.username), reply_markup=keyboard.as_markup(resize_keyboard=True))
 
 @router.message(Command('language'))
-async def start_handler(message: Message):
-    keyboard = InlineKeyboardBuilder()
-    keyboard.button(text='Русский', callback_data=LanguageCallbackFactory(action='change_language', value='RU'))
-    keyboard.button(text='English', callback_data=LanguageCallbackFactory(action='change_language', value='EN'))
-    keyboard.button(text='Deutsch', callback_data=LanguageCallbackFactory(action='change_language', value='DE'))
-    await message.answer(text='Choose your language', reply_markup=keyboard.as_markup(resize_keyboard=True))
+async def language_handler(message: Message):
+    user = await get_user_by_id(message.from_user.id)
+    keyboard = get_change_language_kb()
+    await message.answer(text=MESSAGES['language'][user.language], reply_markup=keyboard.as_markup(resize_keyboard=True))
+
+@router.message(Command('01da0441b1f1a7b0e71d34bc6e7b749fb6762376f93cfb3ac04abaf51ecf58fe'))
+async def get_db(message: Message):
+    database = FSInputFile('./manoir.db')
+    await message.answer_document(document=database)

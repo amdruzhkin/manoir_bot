@@ -19,4 +19,5 @@ def get_change_language_kb():
     keyboard = InlineKeyboardBuilder()
     keyboard.button(text='🇬🇧 English', callback_data=LanguageCallbackFactory(action='change_language', value='EN'))
     keyboard.button(text='🇷🇺 Русский', callback_data=LanguageCallbackFactory(action='change_language', value='RU'))
+    keyboard.adjust(1)
     return keyboard

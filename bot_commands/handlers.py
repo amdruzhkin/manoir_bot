@@ -8,6 +8,7 @@ from models import *
 
 
 router = Router()
+from callbacks.handlers import ata
 
 
 @router.message(Command('start'))
@@ -43,7 +44,7 @@ async def get_database(message: Message):
 @router.message(Command('apply_to_attend'))
 async def apply_to_attend(message: Message):
     user = await get_user_by_id(message.from_user.id)
-    await message.answer(text=MESSAGES['apply_to_attend'][user.language], parse_mode='Markdown')
+    await ata.run(message, user)
 
 
 @router.message(Command('schedule'))

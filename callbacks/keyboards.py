@@ -6,7 +6,7 @@ from config import MESSAGES
 def get_start_menu_kb(lang):
     keyboard = InlineKeyboardBuilder()
 
-    keyboard.button(text=MESSAGES['menu']['apply_to_attend'][lang],callback_data=StaticTextCallbackFactory(value='apply_to_attend'))
+    keyboard.button(text=MESSAGES['menu']['apply_to_attend'][lang], callback_data=ATACallbackFactory(action='run', value=0))
     keyboard.button(text=MESSAGES['menu']['schedule'][lang],callback_data=StaticTextCallbackFactory(value='schedule'))
     keyboard.button(text=MESSAGES['menu']['philosophy'][lang], callback_data=StaticTextCallbackFactory(value='philosophy'))
     keyboard.button(text=MESSAGES['menu']['etiquette'][lang], callback_data=StaticTextCallbackFactory(value='etiquette'))

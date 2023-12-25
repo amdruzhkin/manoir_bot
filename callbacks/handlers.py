@@ -30,9 +30,9 @@ async def static_text(callback: CallbackQuery, callback_data: StaticTextCallback
         answer = MESSAGES[callback_data.value]
         if 'image_src' in answer.keys():
                 await callback.message.answer_photo(photo=FSInputFile(f'./images/{answer["image_src"]}'), caption=answer[user.language], parse_mode='Markdown')
-        # elif 'video_src' in answer.keys():
-        #         await callback.message.answer_video(video=FSInputFile(f'./images/{answer["video_src"]}'),
-        #                                             caption=answer[user.language], parse_mode='Markdown')
+        elif 'video_src' in answer.keys():
+                await callback.message.answer_video(video=FSInputFile(f'./images/{answer["video_src"]}'),
+                                                    caption=answer[user.language], parse_mode='Markdown')
         else:
                 await callback.message.answer(text=answer[user.language], parse_mode='Markdown')
 

@@ -66,13 +66,16 @@ async def tariffs(message: Message):
 @router.message(Command('philosophy'))
 async def philosophy(message: Message):
     user = await get_user_by_id(message.from_user.id)
-    await message.answer(text=MESSAGES['philosophy'][user.language], parse_mode='Markdown')
+    # await message.answer(text=MESSAGES['philosophy'][user.language], parse_mode='Markdown')
+    await message.answer_video(video=FSInputFile(f'./images/{MESSAGES["philosophy"]["video_src"]}'),
+                                        caption=MESSAGES['philosophy'][user.language], parse_mode='Markdown')
 
 
 @router.message(Command('etiquette'))
 async def etiquette(message: Message):
     user = await get_user_by_id(message.from_user.id)
-    answer = MESSAGES['etiquette']
-    await message.answer_photo(photo=FSInputFile(f'./images/{answer["image_src"]}'),
-                               caption=answer[user.language], parse_mode='Markdown')
+    # answer = MESSAGES['etiquette']
+    # await message.answer_photo(photo=FSInputFile(f'./images/{answer["image_src"]}'),
+    #                            caption=answer[user.language], parse_mode='Markdown')
+    await message.answer(text=MESSAGES['etiquette'][user.language], parse_mode='Markdown')
 

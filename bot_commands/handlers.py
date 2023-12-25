@@ -50,13 +50,17 @@ async def apply_to_attend(message: Message):
 @router.message(Command('schedule'))
 async def schedule(message: Message):
     user = await get_user_by_id(message.from_user.id)
-    await message.answer(text=MESSAGES['schedule'][user.language], parse_mode='Markdown')
+    answer = MESSAGES['schedule']
+    await message.answer_photo(photo=FSInputFile(f'./images/{answer["image_src"]}'),
+                                        caption=answer[user.language], parse_mode='Markdown')
 
 
 @router.message(Command('tariffs'))
 async def tariffs(message: Message):
     user = await get_user_by_id(message.from_user.id)
-    await message.answer(text=MESSAGES['tariffs'][user.language], parse_mode='Markdown')
+    answer = MESSAGES['tariffs']
+    await message.answer_photo(photo=FSInputFile(f'./images/{answer["image_src"]}'),
+                               caption=answer[user.language], parse_mode='Markdown')
 
 
 @router.message(Command('philosophy'))
@@ -68,5 +72,7 @@ async def philosophy(message: Message):
 @router.message(Command('etiquette'))
 async def etiquette(message: Message):
     user = await get_user_by_id(message.from_user.id)
-    await message.answer(text=MESSAGES['etiquette'][user.language], parse_mode='Markdown')
+    answer = MESSAGES['etiquette']
+    await message.answer_photo(photo=FSInputFile(f'./images/{answer["image_src"]}'),
+                               caption=answer[user.language], parse_mode='Markdown')
 

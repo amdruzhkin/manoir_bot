@@ -28,10 +28,13 @@ async def language(callback: CallbackQuery, callback_data: LanguageCallbackFacto
 async def static_text(callback: CallbackQuery, callback_data: StaticTextCallbackFactory):
         user = await get_user_by_id(callback.from_user.id)
         answer = MESSAGES[callback_data.value]
-        # if 'image_src' in answer.keys():
-        #         await callback.message.answer_photo(photo=FSInputFile(f'./images/logo.jpg'), caption=answer[user.language], parse_mode='Markdown')
-        # else:
-        await callback.message.answer(text=answer[user.language], parse_mode='Markdown')
+        if 'image_src' in answer.keys():
+                await callback.message.answer_photo(photo=FSInputFile(f'./images/{answer["image_src"]}'), caption=answer[user.language], parse_mode='Markdown')
+        # elif 'video_src' in answer.keys():
+        #         await callback.message.answer_video(video=FSInputFile(f'./images/{answer["video_src"]}'),
+        #                                             caption=answer[user.language], parse_mode='Markdown')
+        else:
+                await callback.message.answer(text=answer[user.language], parse_mode='Markdown')
 
 @router.callback_query(ATACallbackFactory.filter())
 async def callbacks_num_change_fab(callback: CallbackQuery, callback_data: ATACallbackFactory):
@@ -45,7 +48,11 @@ async def callbacks_num_change_fab(callback: CallbackQuery, callback_data: ATACa
                 ata.quizes[user.tg_id]['current_question'] += 1
 
                 if ata.quizes[user.tg_id]['current_question'] == len(ata.questions):
-                        await callback.message.answer(MESSAGES['questions']['final_message'][user.language])
+                        # await callback.message.answer(MESSAGES['questions']['final_message'][user.language])
+
+                        await callback.message.answer_photo(photo=FSInputFile(f'./images/{MESSAGES["questions"]["final_message"]["image_src"]}'),
+                                     caption=MESSAGES['questions']['final_message'][user.language], parse_mode='Markdown',)
+
                         new_lead_text = f'Новый лид! @{callback.from_user.username}\nОтветы:\n'
                         for i, answer in enumerate(ata.quizes[user.tg_id]['answers']):
                                 new_lead_text += f'{i + 1}) {answer}\n'

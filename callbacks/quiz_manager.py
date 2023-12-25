@@ -1,5 +1,5 @@
 import time
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from callbacks import ATACallbackFactory
 from config import MESSAGES
@@ -28,4 +28,8 @@ class ATAManager:
             keyboard.button(text=answer, callback_data=ATACallbackFactory(action=f'question_{i}', value=i))
         keyboard.adjust(1)
 
-        await message.answer(f'{question["text"]}', reply_markup=keyboard.as_markup(resize_keyboard=True))
+        if 'image_src' in question.keys():
+            await message.answer_photo(photo=FSInputFile(f'./images/{question["image_src"]}'),
+                                       caption=question["text"], parse_mode='Markdown', reply_markup=keyboard.as_markup(resize_keyboard=True))
+        else:
+            await message.answer(f'{question["text"]}', reply_markup=keyboard.as_markup(resize_keyboard=True))
